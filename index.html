@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Accordion Component</title>
+
+    
+    <!-- google fonts 免費字體 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+  
+    <style>
+      /*
+      MAIN COLOR: #087f5b
+      GREY COLOR: #343a40
+      */
+
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        color: #343a40;
+        line-height: 1;
+      }
+
+
+      img {
+        height: 200px;
+        border-radius: 20px;
+        /* 變形  scale(1.5)：放大1.5倍*/
+        transform: scale(1.5);
+        box-shadow: 0 0 12px rgb(144, 144, 144);
+      }
+
+      .carousel {
+        background-color: rgb(156, 185, 205);
+        width: 800px;
+        margin: 100px auto;
+        color: aliceblue;
+        padding: 32px;
+        position: relative;
+        padding-left: 86px;
+        border-radius: 15px;
+
+        /* FLEX */
+        display: flex;
+        align-items: center;
+        gap: 80px;
+      }
+
+      .quote-text {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 1.5;
+        margin-bottom: 32px;
+      }
+
+      .quote-author {
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+
+      .quote-job {
+        font-size: 14px;
+      }
+
+      .btn {
+        /* 相對carosel絕對位置，在carosel中要設定relative */
+        position: absolute;
+        color: rgb(108, 129, 143);
+        width: 40px;
+        height: 40px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 50%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .btn-left {
+        left: 0;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        /* 調整箭頭位置 */
+        top:50%;
+        transform:translate(-50%, -50%);
+      }
+
+      .btn-right {
+        right: 0;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        /* 調整箭頭位置 */
+        top:50%;
+        transform:translate(50%, -50%);
+      }
+
+      /* 四個點樣式設置 */
+      .dots{
+        position: absolute;
+        left:50%;
+        bottom:0;
+        transform: translate(-50%,32px);
+        display: flex;
+        gap:12px;
+      }
+
+      .dot{
+       height:12px;
+       width:12px;
+       background-color: #fff;
+       border:2px solid rgb(156, 185, 205);
+       border-radius: 50%;
+       cursor:pointer;
+      }
+
+      .dot-fill{
+        background-color: rgb(156, 185, 205);
+      }
+      .icon1 {
+        width: 24px;
+        height: 24px;
+      } 
+     
+      .accordion {
+        width: 700px;
+        margin: 100px auto;
+
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .item {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        row-gap: 32px;
+        column-gap: 24px;
+        /* 陰影 */
+        box-shadow: 0 0 32px rgba(0, 0, 0, 0.15);
+        padding: 24px;
+      }
+
+      .icon {
+        width: 24px;
+        height: 24px;
+        stroke: #ffa8a8;
+      }
+
+      /* 同時指定用逗號 */
+      .text {
+        color: #ffa8a8;
+        font-size: 24px;
+        font-weight: 500;
+      }
+
+      .number {
+        color: #f9dede;
+        font-size: 24px;
+        font-weight: 500;
+      }
+
+      .hidden-box {
+        grid-column: 2/3;
+        display: none;
+      }
+
+      /* 階層關係用空格 */
+      .hidden-box p {
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+
+      .hidden-box ul {
+        margin-left: 20px;
+        color: #adb5bd;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .open {
+        border-top: 8px solid #ffa8a8;
+      }
+
+      /* 設定如何展開  選定open中的hidden-box*/
+      .open .hidden-box {
+        display: block;
+      }
+
+      .open .number {
+        color: #ffa8a8;
+      }
+
+      table {
+        width: 800px;
+        margin: 100px auto;
+        /* border: 1px solid #343a40; */
+        font-size: 18px;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        /* border: 1px solid #343a40; */
+        text-align: left;
+        padding: 16px 24px;
+        width: 25%;
+      }
+
+      thead th {
+        background-color:  rgb(167, 201, 223);
+        color: rgb(255, 255, 255);
+      }
+
+      tbody tr:nth-child(odd) {
+        background-color: #f8f9fa;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #dee2e6;
+      }
+    </style>
+ 
+ 
+
+  <body>
+    <div class="carousel">
+      <img src="cat.jpg" alt="Cat" />
+
+      <blockquote class="quote">
+        <p class="quote-text">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+          Quamdistinctio hic neque, deleniti officia magnam dolore aspernatur
+          inventore sequi illum ipsum? Ratione natus quibusdam, quis voluptatum
+          nostrum eum laudantium.
+        </p>
+        <p class="quote-author">meow</p>
+        <p class="quote-job">Model</p>
+      </blockquote>
+
+      <botton class="btn btn-right">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="icon1"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M8.25 4.5l7.5 7.5-7.5 7.5"
+          />
+        </svg>
+      </botton>
+
+      <botton class="btn btn-left">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="icon1"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 19.5L8.25 12l7.5-7.5"
+          />
+        </svg>
+      </botton>
+      <div class="dots">
+        <button class="dot dot-fill">&nbsp;</button>
+        <button class="dot">&nbsp;</button>
+        <button class="dot">&nbsp;</button>
+        <button class="dot">&nbsp;</button>
+      </div>
+    </div>
+
+  
+    <div class="accordion">
+      <div class="item">
+        <p class="number">01</p>
+        <p class="text">Text data</p>
+
+        <!-- heroicons 免費素材 -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="icon"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5"
+          />
+        </svg>
+
+        <div class="hidden-box">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic
+            possimus nesciunt maiores assumenda rem veritatis nihil, beatae
+            tempore commodi voluptatem fugit aut, odit earum, illum molestias
+            omnis ex natus eaque.
+          </p>
+
+          <ul>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="item open">
+        <p class="number">02</p>
+        <p class="text">Incoporate the essential data</p>
+
+        <!-- heroicons 免費素材 -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="icon"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5"
+          />
+        </svg>
+        
+        <div class="hidden-box">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic
+            possimus nesciunt maiores assuenda rem veritatis nihil, beatae
+            tempore commodi voluptatem fugi , odit earum, illum molestias
+            omnis ex natus eaque.
+          </p>
+
+          <ul>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="item">
+        <p class="number">03</p>
+        <p class="text">Reflect your all-in costs</p>
+
+        <!-- heroicons 免費素材 -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="icon"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5"
+          />
+        </svg>
+        <div class="hidden-box">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic
+            possimus nesciunt maiores assumenda rem veritatis nihil, beatae
+            tempore commodi voluptatem fugit aut, odit earum, illum molestias
+            omnis ex natus eaque.
+          </p>
+
+          <ul>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <!-- tr指的是table row;td指的是table data -->
+        <tr>
+          <th>Chair</th>
+          <th>Chair</th>
+          <th>Chair</th>
+          <th>Chair</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Width</th>
+          <td>50cm</td>
+          <td>50cm</td>
+          <td>50cm</td>
+        </tr>
+        <tr>
+          <th>Width</th>
+          <td>50cm</td>
+          <td>50cm</td>
+          <td>50cm</td>
+        </tr>
+        <tr>
+          <th>Width</th>
+          <td>50cm</td>
+          <td>50cm</td>
+          <td>50cm</td>
+        </tr>
+        <tr>
+          <th>Width</th>
+          <td>50cm</td>
+          <td>50cm</td>
+          <td>50cm</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
